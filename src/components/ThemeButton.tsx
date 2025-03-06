@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
-import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import './ThemeButton.css';
 
 export function ThemeButton() {
   const [isDark, setIsDark] = useState(false);
@@ -23,7 +23,7 @@ export function ThemeButton() {
     }
   }, []);
   
-  // Toggle theme function
+  // Theme toggle function
   const toggleTheme = () => {
     if (isDark) {
       document.documentElement.classList.remove('dark');
@@ -41,25 +41,32 @@ export function ThemeButton() {
   }
 
   return (
-    <motion.button
+    <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 2.5, duration: 0.5 }}
-      onClick={toggleTheme}
-      className="fixed top-6 right-6 z-50 flex items-center justify-center w-10 h-10 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-700 transition-colors shadow-md"
-      aria-label="Toggle theme"
+      className="fixed top-6 right-6 z-50"
     >
-      <motion.div
-        initial={false}
-        animate={{ rotate: isDark ? 180 : 0 }}
-        transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        className="relative w-5 h-5"
+      <button
+        className="theme-toggle flex items-center justify-center"
+        type="button"
+        title="Toggle theme"
+        aria-label="Toggle theme"
+        onClick={toggleTheme}
       >
-        <Sun className="absolute inset-0 h-full w-full transition-opacity" 
-          style={{ opacity: isDark ? 0 : 1 }} />
-        <Moon className="absolute inset-0 h-full w-full transition-opacity" 
-          style={{ opacity: isDark ? 1 : 0 }} />
-      </motion.div>
-    </motion.button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          aria-hidden="true"
+          width="1em"
+          height="1em"
+          fill="currentColor"
+          className="theme-toggle__inner-moon"
+          viewBox="0 0 32 32"
+        >
+          <path d="M27.5 11.5v-7h-7L16 0l-4.5 4.5h-7v7L0 16l4.5 4.5v7h7L16 32l4.5-4.5h7v-7L32 16l-4.5-4.5zM16 25.4a9.39 9.39 0 1 1 0-18.8 9.39 9.39 0 1 1 0 18.8z" />
+          <circle cx="16" cy="16" r="8.1" />
+        </svg>
+      </button>
+    </motion.div>
   );
 }

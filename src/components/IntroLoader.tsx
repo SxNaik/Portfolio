@@ -2,6 +2,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState, useEffect, useRef } from 'react';
 import Lottie from 'lottie-react';
 import loadingAnimation from '../assets/animations/loading.json';
+import { cn } from '../lib/utils';
+import "@theme-toggles/react/css/InnerMoon.css";
+import { InnerMoon } from "@theme-toggles/react";
+
 
 interface IntroLoaderProps {
   onComplete?: () => void;
@@ -14,6 +18,13 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
   const nameRef = useRef<HTMLHeadingElement>(null);
   const lottieRef = useRef<any>(null);
   
+  // Handle animation speed
+  useEffect(() => {
+    if (lottieRef.current) {
+      lottieRef.current.setSpeed(0.6);
+    }
+  }, []);
+
   // Calculate position for name transition
   useEffect(() => {
     // Start transition after initial display
@@ -88,13 +99,56 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
           exit={{ 
             opacity: 0,
             transition: { 
-              duration: 0.6, 
-              ease: easing 
+              duration: 1.2, 
+              ease: easing,
+              delay: 0.3
             }
           }}
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#111111] text-white overflow-hidden"
+          className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-transparent text-white overflow-hidden"
         >
-          <div className="flex flex-col items-center gap-5">
+          <motion.div 
+            className="absolute inset-0"
+            initial={{ clipPath: 'inset(0 0 0 0)' }}
+            exit={{
+              clipPath: [
+                'inset(0 0 0 0)',
+                'url(#wave-85)',
+                'url(#wave-65)',
+                'url(#wave-45)',
+                'url(#wave-25)',
+                'url(#wave-5)',
+                'inset(0 0 100% 0)'
+              ],
+              transition: {
+                duration: 1.5,
+                ease: [0.76, 0, 0.24, 1],
+                times: [0, 0.2, 0.4, 0.6, 0.8, 0.9, 1]
+              }
+            }}
+          >
+            <svg width="0" height="0">
+              <defs>
+                <clipPath id="wave-85" clipPathUnits="objectBoundingBox">
+                  <path d="M0,0 H1 V0.85 Q0.9,0.92 0.8,0.83 Q0.7,0.78 0.6,0.87 Q0.5,0.92 0.4,0.83 Q0.3,0.78 0.2,0.87 Q0.1,0.92 0,0.85 V0" />
+                </clipPath>
+                <clipPath id="wave-65" clipPathUnits="objectBoundingBox">
+                  <path d="M0,0 H1 V0.65 Q0.9,0.72 0.8,0.63 Q0.7,0.58 0.6,0.67 Q0.5,0.72 0.4,0.63 Q0.3,0.58 0.2,0.67 Q0.1,0.72 0,0.65 V0" />
+                </clipPath>
+                <clipPath id="wave-45" clipPathUnits="objectBoundingBox">
+                  <path d="M0,0 H1 V0.45 Q0.9,0.52 0.8,0.43 Q0.7,0.38 0.6,0.47 Q0.5,0.52 0.4,0.43 Q0.3,0.38 0.2,0.47 Q0.1,0.52 0,0.45 V0" />
+                </clipPath>
+                <clipPath id="wave-25" clipPathUnits="objectBoundingBox">
+                  <path d="M0,0 H1 V0.25 Q0.9,0.32 0.8,0.23 Q0.7,0.18 0.6,0.27 Q0.5,0.32 0.4,0.23 Q0.3,0.18 0.2,0.27 Q0.1,0.32 0,0.25 V0" />
+                </clipPath>
+                <clipPath id="wave-5" clipPathUnits="objectBoundingBox">
+                  <path d="M0,0 H1 V0.05 Q0.9,0.12 0.8,0.03 Q0.7,-0.02 0.6,0.07 Q0.5,0.12 0.4,0.03 Q0.3,-0.02 0.2,0.07 Q0.1,0.12 0,0.05 V0" />
+                </clipPath>
+              </defs>
+            </svg>
+            <div className="w-full h-full bg-[#111111]" />
+          </motion.div>
+
+          <div className="flex flex-col items-center gap-5 z-10">
             <div className="flex flex-col items-center gap-1">
               <motion.div
                 key="name-container"
@@ -122,7 +176,12 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
                     duration: 1,
                     ease: easing,
                   }}
-                  className="font-bold text-4xl sm:text-5xl md:text-7xl tracking-tighter"
+                  className={cn(
+                    "font-bold text-4xl sm:text-5xl md:text-7xl",
+                    "bg-clip-text text-transparent",
+                    "bg-gradient-to-r from-zinc-900 via-blue-800 to-zinc-600",
+                    "dark:from-zinc-100 dark:via-blue-300 dark:to-zinc-400"
+                  )}
                 >
                   SIDDHARTH CHOUHAN
                 </motion.h1>
@@ -134,9 +193,8 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
                   opacity: isNameTransitioning ? 0 : 1 
                 }}
                 transition={{ 
-                  duration: 0.8, 
-                  ease: easing,
-                  delay: 0.8
+                  duration: 0.2, 
+                  ease: "easeOut" 
                 }}
                 className="text-zinc-500 text-sm font-light tracking-widest"
               >
@@ -144,45 +202,27 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
               </motion.p>
             </div>
             
-            {/* Lottie Animation below the name */}
+            {/* Large Centered Hand Loading Animation */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ 
                 opacity: isNameTransitioning ? 0 : 1 
               }}
               transition={{ 
-                duration: 0.5, 
+                duration: 0.3, 
                 ease: easing,
                 delay: 1
               }}
-              className="w-[120px] h-[120px] my-2"
+              className="w-[280px] h-[280px] my-6 mx-auto flex items-center justify-center"
             >
               <Lottie 
                 animationData={loadingAnimation} 
                 loop={true}
                 autoplay={true}
                 lottieRef={lottieRef}
+                style={{ transform: 'scale(1.3)' }}
               />
             </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, scaleX: 0 }}
-              animate={{ 
-                opacity: isNameTransitioning ? 0 : 1, 
-                scaleX: isNameTransitioning ? 0 : 1
-              }}
-              transition={{ 
-                scaleX: { 
-                  duration: 1.2, 
-                  ease: easing 
-                },
-                opacity: { 
-                  duration: 0.3, 
-                  ease: easing 
-                }
-              }}
-              className="w-[280px] sm:w-[320px] md:w-[380px] h-[2px] bg-white mt-4 origin-left"
-            />
           </div>
         </motion.div>
       )}

@@ -1,0 +1,59 @@
+/* InnerMoon styles - exact replica of @theme-toggles/react InnerMoon.css */
+
+.theme-toggle {
+  --theme-toggle__size: 1.5rem;
+  --theme-toggle__icon-size: 0.75em;
+  --theme-toggle__icon-offset: 0.125em;
+  
+  position: relative;
+  display: inline-block;
+  width: var(--theme-toggle__size);
+  height: var(--theme-toggle__size);
+  vertical-align: middle;
+  overflow: hidden;
+  color: var(--theme-toggle__color, currentColor);
+}
+
+.inner-moon {
+  --inner-moon__size: var(--theme-toggle__size);
+  --inner-moon__spot-size: 0.25em;
+  --inner-moon__duration: 750ms;
+  
+  width: var(--inner-moon__size);
+  height: var(--inner-moon__size);
+}
+
+.inner-moon__moon {
+  position: absolute;
+  top: var(--theme-toggle__icon-offset);
+  right: var(--theme-toggle__icon-offset);
+  bottom: var(--theme-toggle__icon-offset);
+  left: var(--theme-toggle__icon-offset);
+  border-radius: 50%;
+  border: calc(var(--theme-toggle__icon-size) * 0.125) solid currentColor;
+  transition: transform var(--inner-moon__duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.inner-moon__spot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--inner-moon__spot-size);
+  height: var(--inner-moon__spot-size);
+  border-radius: 50%;
+  background-color: currentColor;
+  transform: translate(25%, -25%) scale(0);
+  transition: transform var(--inner-moon__duration) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Toggled state */
+.theme-toggle--toggled .inner-moon__moon {
+  background-color: currentColor;
+  border-color: transparent;
+  transform: scale(1);
+}
+
+.theme-toggle--toggled .inner-moon__spot {
+  transform: translate(25%, -25%) scale(1);
+  background-color: var(--theme-toggle__background, #1e293b);
+} 

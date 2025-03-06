@@ -1,7 +1,7 @@
-import { Moon, Sun } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { cn } from '../lib/utils';
+import { Moon, Sun } from 'lucide-react';
 
 export function ThemeToggle() {
   const [theme, setTheme] = useLocalStorage('theme', 'light');
@@ -27,8 +27,13 @@ export function ThemeToggle() {
         'dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700',
         'transition-colors duration-200'
       )}
+      aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      {theme === 'dark' ? (
+        <Sun className="h-5 w-5" />
+      ) : (
+        <Moon className="h-5 w-5" />
+      )}
     </button>
   );
 }

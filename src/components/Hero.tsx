@@ -103,7 +103,7 @@ export function Hero() {
               pointerEvents: "none" // Prevent interaction during animation
             }}
           >
-            Siddharth Chouhan
+            SIDDHARTH CHOUHAN
           </motion.h1>
 
           <motion.div
