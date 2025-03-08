@@ -45,9 +45,9 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         // Adjust scale based on screen size
         let scale;
         if (window.innerWidth < 640) { // sm breakpoint
-          scale = Math.min(scaleX, scaleY) * 0.95; // Slightly smaller on mobile
+          scale = Math.min(scaleX, scaleY); // Exact match on mobile
         } else {
-          scale = Math.min(scaleX, scaleY) * 0.98;
+          scale = Math.min(scaleX, scaleY); // Exact match on larger screens
         }
         
         // Calculate the center points

@@ -9,6 +9,8 @@ import { IntroLoader } from './components/IntroLoader';
 import { ThemeButton } from './components/ThemeButton';
 import { Footer } from './components/Footer';
 import { LocationIndicator } from './components/LocationIndicator';
+import { GlobalBackground } from './components/GlobalBackground';
+
 
 function App() {
   const [introComplete, setIntroComplete] = useState(false);
@@ -18,21 +20,29 @@ function App() {
     setIntroComplete(true);
     // Enable scrolling after intro
     document.body.style.overflow = 'auto';
+    document.body.style.overflowX = 'hidden';
   };
   
   // Disable scrolling during intro
   useEffect(() => {
     if (!introComplete) {
       document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+      document.body.style.overflowX = 'hidden';
     }
     
     return () => {
       document.body.style.overflow = 'auto';
+      document.body.style.overflowX = 'hidden';
     };
   }, [introComplete]);
 
   return (
-    <>
+    <div className="overflow-x-hidden w-full">
+      {/* Background Animation - reverted to original */}
+      {introComplete && <GlobalBackground />}
+      
       {/* Intro Loader */}
       <IntroLoader onComplete={handleIntroComplete} />
       
@@ -43,22 +53,18 @@ function App() {
       <LocationIndicator />
       
       {/* Main Content */}
-      <div className={`min-h-screen bg-white dark:bg-zinc-900 transition-opacity duration-1000 ${introComplete ? 'opacity-100' : 'opacity-0'}`}>
-        <Hero />
-        
-        <div className="py-16 bg-zinc-100 dark:bg-zinc-800">
-          <div className="container mx-auto">
-            <ModelViewer3D title="Interactive 3D Design" description="Experience immersive web-based 3D interactivity" />
-          </div>
+      <div className={`transition-opacity duration-1000 ${introComplete ? 'opacity-100' : 'opacity-0'} overflow-x-hidden w-full`}>
+        <div className="bg-transparent">
+          <Hero />
+          <ModelViewer3D title="Interactive 3D Design" description="Experience immersive web-based 3D interactivity" />
+          <Skills />
+          <Projects />
+          <About />
+          <Contact />
+          <Footer />
         </div>
-        
-        <Skills />
-        <Projects />
-        <About />
-        <Contact />
-        <Footer />
       </div>
-    </>
+    </div>
   );
 }
 

@@ -22,8 +22,25 @@ export function Contact() {
   ];
 
   return (
-    <section id="contact" className="py-20 bg-zinc-50 dark:bg-zinc-800">
+    <section id="contact" className="py-20 overflow-hidden">
+      <div className="w-full max-w-5xl mx-auto mb-12 border-t border-black dark:border-black"></div>
+      
       <div className="container mx-auto px-4">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className={cn(
+            "text-3xl md:text-4xl font-bold text-center mb-16",
+            "bg-clip-text text-transparent",
+            "bg-gradient-to-r from-zinc-900 to-zinc-600",
+            "dark:from-zinc-100 dark:to-zinc-400"
+          )}
+        >
+          Get In Touch
+        </motion.h2>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -31,14 +48,6 @@ export function Contact() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl mx-auto text-center mb-16"
         >
-          <h2 className={cn(
-            "text-3xl md:text-4xl font-bold mb-6",
-            "bg-clip-text text-transparent",
-            "bg-gradient-to-r from-zinc-900 to-zinc-600",
-            "dark:from-zinc-100 dark:to-zinc-400"
-          )}>
-            Let's Connect
-          </h2>
           <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-8">
             I'm always open to new opportunities and collaborations.
             Feel free to reach out!

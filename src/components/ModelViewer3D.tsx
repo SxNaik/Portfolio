@@ -18,16 +18,13 @@ export function ModelViewer3D({ title, description }: ModelViewerProps) {
     if (!autoRotate) return;
     
     const interval = setInterval(() => {
-      setRotation(prev => ({
-        ...prev,
-        y: prev.y + 0.3
-      }));
-    }, 30);
+      setRotation(prev => ({ ...prev, y: prev.y + 0.5 }));
+    }, 50);
     
     return () => clearInterval(interval);
   }, [autoRotate]);
   
-  // Mouse control handlers
+  // Mouse event handlers for manual rotation
   const handleMouseDown = (e: React.MouseEvent) => {
     setAutoRotate(false);
     setMouseDown(true);
@@ -45,153 +42,192 @@ export function ModelViewer3D({ title, description }: ModelViewerProps) {
     const deltaY = e.clientY - lastMousePosition.current.y;
     
     setRotation(prev => ({
-      x: Math.min(Math.max(prev.x - deltaY * 0.5, -30), 30),
+      x: prev.x - deltaY * 0.5,
       y: prev.y + deltaX * 0.5
     }));
     
     lastMousePosition.current = { x: e.clientX, y: e.clientY };
   };
-
+  
+  // Touch event handlers for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
     setAutoRotate(false);
     setMouseDown(true);
-    lastMousePosition.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    if (e.touches.length > 0) {
+      lastMousePosition.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    setMouseDown(false);
   };
   
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (!mouseDown) return;
+    if (!mouseDown || e.touches.length === 0) return;
     
     const deltaX = e.touches[0].clientX - lastMousePosition.current.x;
     const deltaY = e.touches[0].clientY - lastMousePosition.current.y;
     
     setRotation(prev => ({
-      x: Math.min(Math.max(prev.x - deltaY * 0.5, -30), 30),
+      x: prev.x - deltaY * 0.5,
       y: prev.y + deltaX * 0.5
     }));
     
     lastMousePosition.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
   };
   
-  const handleTouchEnd = () => {
-    setMouseDown(false);
-  };
-
-  // Restart auto-rotation after inactivity
-  useEffect(() => {
-    if (mouseDown) return;
-    
-    const timer = setTimeout(() => {
-      setAutoRotate(true);
-    }, 5000);
-    
-    return () => clearTimeout(timer);
-  }, [mouseDown]);
-
-  // Cube face data
-  const faces = [
-    { 
-      color: 'from-blue-400 to-blue-500', 
-      text: '3D',
-      transform: 'translateZ(100px)',
-      shadow: '0 0 20px rgba(59, 130, 246, 0.3)'
-    },
-    { 
-      color: 'from-purple-400 to-purple-500', 
-      text: 'Web',
-      transform: 'rotateY(180deg) translateZ(100px)',
-      shadow: '0 0 20px rgba(139, 92, 246, 0.3)'
-    },
-    { 
-      color: 'from-green-400 to-green-500', 
-      text: 'Design',
-      transform: 'rotateY(90deg) translateZ(100px)',
-      shadow: '0 0 20px rgba(52, 211, 153, 0.3)'
-    },
-    { 
-      color: 'from-red-400 to-red-500', 
-      text: 'UX',
-      transform: 'rotateY(-90deg) translateZ(100px)',
-      shadow: '0 0 20px rgba(248, 113, 113, 0.3)'
-    },
-    { 
-      color: 'from-yellow-400 to-yellow-500', 
-      text: 'UI',
-      transform: 'rotateX(90deg) translateZ(100px)',
-      shadow: '0 0 20px rgba(251, 191, 36, 0.3)'
-    },
-    { 
-      color: 'from-pink-400 to-pink-500', 
-      text: 'Creative',
-      transform: 'rotateX(-90deg) translateZ(100px)',
-      shadow: '0 0 20px rgba(244, 114, 182, 0.3)'
-    },
-  ];
-
   return (
-    <div className="w-full h-[400px] flex flex-col items-center justify-center py-10 relative">
-      <div 
-        className="relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
-        onMouseMove={handleMouseMove}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        {/* 3D scene container */}
-        <div 
-          className="perspective-[1200px] w-full h-full flex items-center justify-center"
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div className="relative z-10 text-center px-6 sm:px-8 md:px-12 w-full max-w-5xl mx-auto flex flex-col items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="mb-8 relative w-full max-w-4xl mx-auto"
         >
-          {/* Cube */}
-          <div
-            className="relative w-[200px] h-[200px] transform-style-preserve-3d"
+          <h2 className={cn(
+            "text-3xl md:text-4xl font-bold",
+            "bg-clip-text text-transparent",
+            "bg-gradient-to-r from-zinc-900 to-zinc-600",
+            "dark:from-zinc-100 dark:to-zinc-400"
+          )}>
+            {title}
+          </h2>
+          {description && (
+            <p className="mt-4 text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+              {description}
+            </p>
+          )}
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="relative w-full max-w-md aspect-square mx-auto flex items-center justify-center"
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+          onMouseLeave={handleMouseUp}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchMove={handleTouchMove}
+        >
+          {/* 3D Cube */}
+          <div 
+            className="w-full h-full relative flex items-center justify-center"
             style={{ 
-              transformStyle: 'preserve-3d',
-              transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
-              transition: autoRotate ? 'transform 0.2s ease' : 'none'
+              perspective: "1000px",
+              transformStyle: "preserve-3d"
             }}
           >
-            {faces.map((face, index) => (
+            <div
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,
+                transformStyle: "preserve-3d",
+                transition: autoRotate ? "transform 0.05s linear" : "none"
+              }}
+            >
+              {/* Front face */}
               <div
-                key={index}
-                className={cn(
-                  'absolute w-full h-full flex items-center justify-center',
-                  'bg-gradient-to-br rounded-lg backdrop-blur-sm',
-                  'text-white text-2xl font-bold',
-                  'border border-white/10',
-                  face.color
-                )}
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-blue-500/80 dark:bg-blue-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
                 style={{
-                  transformStyle: 'preserve-3d',
-                  transform: face.transform,
-                  backfaceVisibility: 'hidden',
-                  boxShadow: face.shadow,
+                  transform: "translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
                 }}
               >
-                <span className="drop-shadow-lg">{face.text}</span>
+                Front
               </div>
-            ))}
+              
+              {/* Back face */}
+              <div
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-red-500/80 dark:bg-red-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{
+                  transform: "rotateY(180deg) translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
+                }}
+              >
+                Back
+              </div>
+              
+              {/* Left face */}
+              <div
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-green-500/80 dark:bg-green-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{
+                  transform: "rotateY(-90deg) translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
+                }}
+              >
+                Left
+              </div>
+              
+              {/* Right face */}
+              <div
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-yellow-500/80 dark:bg-yellow-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{
+                  transform: "rotateY(90deg) translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
+                }}
+              >
+                Right
+              </div>
+              
+              {/* Top face */}
+              <div
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-purple-500/80 dark:bg-purple-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{
+                  transform: "rotateX(90deg) translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
+                }}
+              >
+                Top
+              </div>
+              
+              {/* Bottom face */}
+              <div
+                className="absolute w-40 h-40 md:w-56 md:h-56 bg-pink-500/80 dark:bg-pink-600/80 rounded-lg flex items-center justify-center text-white font-bold text-xl"
+                style={{
+                  transform: "rotateX(-90deg) translateZ(90px)",
+                  backfaceVisibility: "hidden",
+                  left: "calc(50% - 20rem / 2)",
+                  top: "calc(50% - 20rem / 2)"
+                }}
+              >
+                Bottom
+              </div>
+            </div>
           </div>
-        </div>
+        </motion.div>
+        
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="mt-8 text-center text-zinc-500 dark:text-zinc-400 text-sm z-10"
+        >
+          <p>Click and drag to rotate the cube</p>
+          <button
+            onClick={() => setAutoRotate(!autoRotate)}
+            className="mt-2 px-4 py-2 bg-zinc-200 dark:bg-zinc-700 rounded-full text-zinc-800 dark:text-zinc-200 hover:bg-zinc-300 dark:hover:bg-zinc-600 transition-colors"
+          >
+            {autoRotate ? "Stop Rotation" : "Auto Rotate"}
+          </button>
+        </motion.div>
       </div>
-      
-      <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.5 }}
-        className="text-center mt-6"
-      >
-        <h3 className="text-xl font-bold text-zinc-800 dark:text-zinc-200">{title}</h3>
-        {description && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-2 max-w-sm mx-auto">
-            {description}
-          </p>
-        )}
-        <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-4">
-          Click and drag to rotate • Double-click to reset view
-        </p>
-      </motion.div>
-    </div>
+    </section>
   );
 }

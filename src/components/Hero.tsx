@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion';
-import { Code2, Laptop, Presentation, Box, Layers, RotateCw } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 export function Hero() {
@@ -13,75 +12,13 @@ export function Hero() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background with 3D-like gradients and particles */}
-      <div className="absolute inset-0 bg-gradient-to-br from-zinc-100 via-zinc-200 to-zinc-100 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-900" />
-      
-      {/* Animated 3D-like shapes */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Large subtle shape */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          transition={{ duration: 1 }}
-          className="absolute top-1/4 -left-24 w-96 h-96 rounded-full bg-blue-500/20 dark:bg-blue-400/10 blur-3xl"
-          style={{ mixBlendMode: 'plus-lighter' }}
-        />
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="absolute bottom-1/4 -right-24 w-96 h-96 rounded-full bg-purple-500/20 dark:bg-purple-400/10 blur-3xl"
-          style={{ mixBlendMode: 'plus-lighter' }}
-        />
-      </div>
-      
-      {/* Floating 3D icons with better animations */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="absolute inset-0 pointer-events-none"
-      >
-        {[Code2, Laptop, Presentation, Box, Layers, RotateCw].map((Icon, index) => (
-          <motion.div
-            key={index}
-            className="absolute"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -15, 0],
-              rotate: [0, 5, 0, -5, 0],
-              scale: [1, 1.05, 1],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              repeatType: "reverse",
-              delay: index * 0.3,
-              ease: "easeInOut"
-            }}
-          >
-            <Icon
-              size={index % 2 === 0 ? 28 : 22}
-              className="text-zinc-600 dark:text-zinc-400"
-              style={{
-                filter: "drop-shadow(0px 2px 4px rgba(0,0,0,0.2))"
-              }}
-            />
-          </motion.div>
-        ))}
-      </motion.div>
-
       {/* Main content with 3D animations */}
       <div className="relative z-10 text-center px-6 sm:px-8 md:px-12 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="mb-8"
+          className="mb-8 relative w-full max-w-4xl mx-auto"
           style={{ 
             transformStyle: "preserve-3d", 
             perspective: "1000px" 
@@ -92,10 +29,11 @@ export function Hero() {
             animate={{ opacity: 1, z: 0 }}
             transition={{ duration: 1.2, delay: 0.2 }}
             className={cn(
-              "text-5xl sm:text-6xl md:text-7xl font-bold hero-name",
+              "font-bold text-5xl sm:text-6xl md:text-7xl text-center w-full hero-name",
               "bg-clip-text text-transparent",
               "bg-gradient-to-r from-zinc-900 via-blue-800 to-zinc-600",
-              "dark:from-zinc-100 dark:via-blue-300 dark:to-zinc-400"
+              "dark:from-zinc-100 dark:via-blue-300 dark:to-zinc-400",
+              "px-2 sm:px-0"
             )}
             style={{ 
               textShadow: "0 4px 8px rgba(0,0,0,0.1)",

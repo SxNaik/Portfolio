@@ -11,8 +11,23 @@ export function About() {
   ];
 
   return (
-    <section id="about" className="py-20 bg-zinc-50 dark:bg-zinc-800">
+    <section id="about" className="py-20 overflow-hidden">
       <div className="container mx-auto px-4">
+        <motion.h2
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className={cn(
+            "text-3xl md:text-4xl font-bold text-center mb-16",
+            "bg-clip-text text-transparent",
+            "bg-gradient-to-r from-zinc-900 to-zinc-600",
+            "dark:from-zinc-100 dark:to-zinc-400"
+          )}
+        >
+          About Me
+        </motion.h2>
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -20,14 +35,6 @@ export function About() {
           transition={{ duration: 0.8 }}
           className="max-w-3xl mx-auto text-center mb-16"
         >
-          <h2 className={cn(
-            "text-3xl md:text-4xl font-bold mb-6",
-            "bg-clip-text text-transparent",
-            "bg-gradient-to-r from-zinc-900 to-zinc-600",
-            "dark:from-zinc-100 dark:to-zinc-400"
-          )}>
-            About Me
-          </h2>
           <p className="text-lg text-zinc-700 dark:text-zinc-300 mb-6">
             I'm a passionate B.Tech 2nd-year student at Barkatullah University, Bhopal, with a deep love for programming and technology. 
             My journey in tech has been driven by curiosity and a desire to create meaningful solutions.

@@ -1,6 +1,7 @@
 Main Features
 
-1. 3D background
+1. 3D background like space and zooming to galaxy when scrolling
+2. Aristide Benoist portfolio for model section.
 
 Normal Features
 

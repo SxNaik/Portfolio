@@ -131,16 +131,21 @@ export function Projects() {
     : projects.filter(project => project.type === activeFilter);
 
   return (
-    <section id="projects" className="py-20 bg-zinc-50 dark:bg-zinc-800">
+    <section id="projects" className="py-20 overflow-hidden">
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-3xl sm:text-4xl font-bold text-center mb-4 text-zinc-800 dark:text-zinc-200"
+          transition={{ duration: 0.8 }}
+          className={cn(
+            "text-3xl md:text-4xl font-bold text-center mb-16",
+            "bg-clip-text text-transparent",
+            "bg-gradient-to-r from-zinc-900 to-zinc-600",
+            "dark:from-zinc-100 dark:to-zinc-400"
+          )}
         >
-          Projects
+          Featured Projects
         </motion.h2>
 
         <motion.p
