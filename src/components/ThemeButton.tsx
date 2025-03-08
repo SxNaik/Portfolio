@@ -12,14 +12,19 @@ export function ThemeButton() {
     
     // Check if theme is already set in localStorage
     const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    // Always default to light mode if no theme is saved
+    if (savedTheme === 'dark') {
       setIsDark(true);
       document.documentElement.classList.add('dark');
     } else {
+      // Default to light mode
       setIsDark(false);
       document.documentElement.classList.remove('dark');
+      // Ensure theme is saved as light in localStorage
+      if (!savedTheme) {
+        localStorage.setItem('theme', 'light');
+      }
     }
   }, []);
   

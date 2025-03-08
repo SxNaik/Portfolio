@@ -113,7 +113,7 @@ export function Hero() {
             className="mt-6 mb-2"
             style={{ transform: "translateZ(10px)" }}
           >
-            <span className="px-4 py-1 rounded-full text-xl md:text-2xl text-zinc-100 bg-zinc-800/90 dark:bg-zinc-100/90 dark:text-zinc-900 font-medium">
+            <span className="text-xl md:text-2xl text-zinc-600 dark:text-zinc-400 font-medium">
               Turning Ideas into Reality
             </span>
           </motion.div>

@@ -33,6 +33,9 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
       const heroNameElement = document.querySelector('.hero-name');
       
       if (heroNameElement && nameRef.current) {
+        // Ensure elements are visible for accurate measurements
+        nameRef.current.style.opacity = '1';
+        
         // Get positions and dimensions
         const introRect = nameRef.current.getBoundingClientRect();
         const heroRect = heroNameElement.getBoundingClientRect();
@@ -40,7 +43,14 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
         // Calculate the transformation needed
         const scaleX = heroRect.width / introRect.width;
         const scaleY = heroRect.height / introRect.height;
-        const scale = Math.min(scaleX, scaleY);
+        
+        // Adjust scale based on screen size
+        let scale;
+        if (window.innerWidth < 640) { // sm breakpoint
+          scale = Math.min(scaleX, scaleY) * 0.95; // Slightly smaller on mobile
+        } else {
+          scale = Math.min(scaleX, scaleY) * 0.98;
+        }
         
         // Calculate the center points
         const introCenterX = introRect.left + introRect.width / 2;
@@ -71,16 +81,16 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
             if (heroNameElement instanceof HTMLElement) {
               heroNameElement.style.opacity = '1';
             }
-          }, 1000);
+          }, 1200); // Increased from 1000 to 1200ms
         }
       }
     }, 3500);
     
-    // Complete intro after name transitions (4.5 seconds total)
+    // Complete intro after name transitions (5 seconds total)
     const completeTimer = setTimeout(() => {
       setShowIntro(false);
       if (onComplete) onComplete();
-    }, 4500);
+    }, 5000); // Increased from 4500 to 5000ms
     
     return () => {
       clearTimeout(transitionTimer);
@@ -148,8 +158,8 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
             <div className="w-full h-full bg-[#111111]" />
           </motion.div>
 
-          <div className="flex flex-col items-center gap-5 z-10">
-            <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <div className="flex flex-col items-center gap-3 px-4 text-center">
               <motion.div
                 key="name-container"
                 initial={{ opacity: 0, y: 20 }}
@@ -162,7 +172,7 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
                   ease: easing,
                   delay: 0.2
                 }}
-                className="relative"
+                className="relative w-full max-w-4xl mx-auto"
               >
                 <motion.h1 
                   ref={nameRef}
@@ -173,15 +183,19 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
                     color: isNameTransitioning ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 1)',
                   }}
                   transition={{
-                    duration: 1,
+                    duration: 1.2,
                     ease: easing,
                   }}
                   className={cn(
-                    "font-bold text-4xl sm:text-5xl md:text-7xl",
+                    "font-bold text-5xl sm:text-6xl md:text-7xl text-center w-full",
                     "bg-clip-text text-transparent",
                     "bg-gradient-to-r from-zinc-900 via-blue-800 to-zinc-600",
-                    "dark:from-zinc-100 dark:via-blue-300 dark:to-zinc-400"
+                    "dark:from-zinc-100 dark:via-blue-300 dark:to-zinc-400",
+                    "px-2 sm:px-0"
                   )}
+                  style={{ 
+                    textShadow: "0 4px 8px rgba(0,0,0,0.1)"
+                  }}
                 >
                   SIDDHARTH CHOUHAN
                 </motion.h1>
@@ -190,13 +204,14 @@ export function IntroLoader({ onComplete }: IntroLoaderProps) {
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ 
-                  opacity: isNameTransitioning ? 0 : 1 
+                  opacity: isNameTransitioning ? 0 : 1
                 }}
                 transition={{ 
-                  duration: 0.2, 
-                  ease: "easeOut" 
+                  duration: isNameTransitioning ? 0.8 : 0.5, 
+                  ease: "easeOut",
+                  delay: isNameTransitioning ? 0 : 0.5
                 }}
-                className="text-zinc-500 text-sm font-light tracking-widest"
+                className="text-zinc-700 dark:text-zinc-300 text-base sm:text-lg font-medium tracking-widest mt-2 z-10"
               >
                 3D DESIGNER & DEVELOPER
               </motion.p>
