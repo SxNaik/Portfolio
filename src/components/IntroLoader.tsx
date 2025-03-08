@@ -3,8 +3,6 @@ import { useState, useEffect, useRef } from 'react';
 import Lottie from 'lottie-react';
 import loadingAnimation from '../assets/animations/loading.json';
 import { cn } from '../lib/utils';
-import "@theme-toggles/react/css/InnerMoon.css";
-import { InnerMoon } from "@theme-toggles/react";
 
 
 interface IntroLoaderProps {
